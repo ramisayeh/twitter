@@ -1,0 +1,5 @@
+.background{
+    background-color: aliceblue;
+    display: flex;
+justify-content: flex-end;
+}
