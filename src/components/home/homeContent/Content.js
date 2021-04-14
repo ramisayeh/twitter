@@ -2,20 +2,17 @@ import React, { forwardRef } from "react";
 import "./Content.css";
 import { Divider } from "antd";
 import { HeartOutlined, CommentOutlined,  } from "@ant-design/icons";
-import { Row, Col } from "antd";
-import {  Space } from 'antd';
-import AddTweet from '../addTweet/AddTweet'
+import { Row, Col } from "antd"
 
-const style = { padding: "8px 0", display: "flex", justifyContent: "center" };
+
+const style = {  display: "flex", justifyContent: "center" };
 
 
 const Content = forwardRef(
   ({ displayName, text, image, avatar }, ref) => {
   return (
     <div className='contentContainer' ref={ref}>
-       <Space direction="vertical">
-        <AddTweet/>
-
+      
     <div className="tweetEntry-tweetHolder">
       <div className="tweetEntry">
         <div className="tweetEntry-content">
@@ -55,7 +52,7 @@ const Content = forwardRef(
         </div>
       </div>
     </div>
-    </Space>
+
     
     </div>
     
