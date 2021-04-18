@@ -1,5 +1,8 @@
 import React, { Component } from "react";
 import { Link } from "react-router-dom";
+import firebase from "firebase";
+import  { Redirect } from 'react-router-dom' 
+
 class Register extends Component {
   constructor() {
     super();
@@ -24,6 +27,20 @@ class Register extends Component {
       password: this.state.password,
       password2: this.state.password2,
     };
+    firebase
+      .auth()
+      .createUserWithEmailAndPassword(newUser.email, newUser.password)
+      .then(() => {
+        alert("Successfully registered! Please login.");
+        localStorage.setItem("username", newUser.email);
+        localStorage.setItem("password", newUser.password);
+        localStorage.setItem("username", newUser.name);
+        if (localStorage.getItem('username'))
+    return <Redirect to='/login'  />
+      })
+      .catch((error) => {
+        alert(error.message);
+      });
     console.log(newUser);
   };
 
@@ -42,7 +59,7 @@ class Register extends Component {
                 <b>Register</b> below
               </h4>
               <p className="grey-text text-darken-1">
-                Already have an account? <Link to="/login">Log in</Link>
+                Already have an account? <Link to="/">Log in</Link>
               </p>
             </div>
             <form noValidate onSubmit={this.onSubmit}>
@@ -76,16 +93,7 @@ class Register extends Component {
                 />
                 <label htmlFor="password">Password</label>
               </div>
-              <div className="input-field col s12">
-                <input
-                  onChange={this.onChange}
-                  value={this.state.password2}
-                  error={errors.password2}
-                  id="password2"
-                  type="password"
-                />
-                <label htmlFor="password2">Confirm Password</label>
-              </div>
+
               <div className="col s12" style={{ paddingLeft: "11.250px" }}>
                 <button
                   style={{

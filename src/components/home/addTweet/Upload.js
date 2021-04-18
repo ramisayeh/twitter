@@ -1,82 +1,89 @@
-import { Modal, Button } from 'antd'
-import { Upload, message } from 'antd';
-import { LoadingOutlined, PlusOutlined } from '@ant-design/icons';
+import React, { useState } from "react";
+import { storage } from "../../../firebase";
+import db from "../../../firebase";
+import firebase from "firebase";
+import {
+  CameraTwoTone
+} from '@ant-design/icons';
 
-import React, { Component } from 'react'
+function ImageUpload({ username }) {
+  const [caption, setCaption] = useState("");
+  const [image, setImage] = useState(null);
+  const [progress, setProgress] = useState(0);
 
+  const handleChange = (e) => {
+    if (e.target.files[0]) {
+      setImage(e.target.files[0]);
+      var src1 = URL.createObjectURL(e.target.files[0]);
 
-export default class Uploaad extends Component{
-    state = {
-      previewVisible: false,
-      previewImage: "",
-      fileList: []
-    };
-  
-    handleCancel = () => this.setState({ previewVisible: false });
-  
-    handlePreview = file => {
-      this.setState({
-        previewImage: file.thumbUrl,
-        previewVisible: true
-      });
-    };
-  
-    handleUpload = ({ fileList }) => {
-      //---------------^^^^^----------------
-      // this is equivalent to your "const img = event.target.files[0]"
-      // here, antd is giving you an array of files, just like event.target.files
-      // but the structure is a bit different that the original file
-      // the original file is located at the `originFileObj` key of each of this files
-      // so `event.target.files[0]` is actually fileList[0].originFileObj
-      console.log('fileList', fileList);
-  
-      // you store them in state, so that you can make a http req with them later
-      this.setState({ fileList });
-    };
-  
-    handleSubmit = event => {
-      event.preventDefault();
-  
-      let formData = new FormData();
-      // add one or more of your files in FormData
-      // again, the original file is located at the `originFileObj` key
-      formData.append("file", this.state.fileList[0].originFileObj);
-  
+      var preview1 = document.getElementById("image-1-preview");
+      preview1.src = src1;
+      preview1.style.display = "block";
+    }
+  };
 
-    };
-  
-    render() {
-      const { previewVisible, previewImage, fileList } = this.state;
-      const uploadButton = (
-        <div>
-          <div className="ant-upload-text">Upload</div>
-        </div>
-      );
-      return (
-        <div>
-          <Upload
-            listType="picture-card"
-            fileList={fileList}
-            onPreview={this.handlePreview}
-            onChange={this.handleUpload}
-            beforeUpload={() => false} // return false so that antd doesn't upload the picture right away
-          >
-            {uploadButton}
-          </Upload>
-  
-          <Button onClick={this.handleSubmit} // this button click will trigger the manual upload
-          >
-              Submit
-          </Button>
-  
-          <Modal
-            visible={previewVisible}
-            footer={null}
-            onCancel={this.handleCancel}
-          >
-            <img alt="example" style={{ width: "100%" }} src={previewImage} />
-          </Modal>
-        </div>
+  const handleUpload = () => {
+    if (image) {
+      const uploadTask = storage.ref(`images/${image.name}`).put(image);
+
+      uploadTask.on(
+        "state_changed",
+        (snapshot) => {
+          // progress function .....
+          const progress = Math.round(
+            (snapshot.bytesTransferred / snapshot.totalBytes) * 100
+          );
+          setProgress(progress);
+        },
+        (error) => {
+          // Error function...
+          console.log(error);
+          alert(error.message);
+        },
+        () => {
+          // upload complete function
+          storage
+            .ref("images")
+            .child(image.name)
+            .getDownloadURL()
+            .then((url) => {
+              db.collection("posts").add({
+                timestamp: firebase.firestore.FieldValue.serverTimestamp(),
+                caption: caption,
+                postImageUrl: url,
+                userName: "Sanskar Tiwari",
+                userProfileUrl:
+                  "https://avatars0.githubusercontent.com/u/55942632?s=460&u=f702a3d87d1f9c125f1ead9b3bec93d26cd3b3a0&v=4",
+              });
+            });
+          setProgress(0);
+          setCaption("");
+          var preview1 = document.getElementById("image-1-preview");
+          preview1.style.display = "none";
+        }
       );
     }
   };
+  const removeImage = () => {
+    var preview1 = document.getElementById("image-1-preview");
+    preview1.style.display = "none";
+  };
+  return (
+    <div className="imageUpload">
+      <div className="imageUpload__bottom">
+        <div className="image-upload">
+          <label htmlFor="file-input">
+          <CameraTwoTone style={{ marginTop: "5px" }}  />       
+          </label>
+          <input
+            id="file-input"
+            type="file"
+            accept="image/*"
+            onChange={handleChange}
+          />
+        </div>
+      </div>
+    </div>
+  );
+}
+export default ImageUpload;

@@ -3,7 +3,6 @@ import Saved from "./components/saved/Saved";
 import Header from './components/header/Header';
 import Home from "./components/home/Home";
 import "antd/dist/antd.css";
-import Landing from "./components/Landing";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import Register from "./components/signup/Register";
 import Login from "./components/signin/Login";
@@ -11,9 +10,8 @@ import Login from "./components/signin/Login";
 
 
 
-
-
 function App() {
+
   return (
    
       <Router>

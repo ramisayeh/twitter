@@ -20,12 +20,7 @@ body {
     margin-top: 10px;
     color: #292f33;
   }
-  .fa-reply:hover {
-    color: #292f33;
-  }
-  .fa-retweet:hover {
-    color: #5cd65c;
-  }
+  
   .fa-heart:hover {
     color: #ff3333;
   }

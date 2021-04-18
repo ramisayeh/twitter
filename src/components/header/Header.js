@@ -5,6 +5,7 @@ import { Layout, Menu} from 'antd';
 import './header.css';
 import { Space} from 'antd';
 import "antd/dist/antd.css";
+import { Link } from "react-router-dom";
 
 const { Header } = Layout;
 
@@ -53,9 +54,9 @@ export default function Headeer() {
               </svg>
             </div>
             <Menu theme='light' mode="horizontal" defaultSelectedKeys={["2"]}>
-              <Menu.Item key="1">Explore</Menu.Item>
-              <Menu.Item key="2">Home</Menu.Item>
-              <Menu.Item key="3">Bookmarks</Menu.Item>
+              <Menu.Item key="1"><Link to="/explore">Explore</Link></Menu.Item>
+              <Menu.Item key="2"><Link to="/home">Home</Link></Menu.Item>
+              <Menu.Item key="3"><Link to="/saved">Bookmarks</Link></Menu.Item>
             </Menu>
             <DropDown />
           </Space>
