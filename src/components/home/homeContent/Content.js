@@ -6,12 +6,13 @@ import { Row, Col } from "antd";
 import CommentInput from "../comment/Commentinput";
 import Comment from "../comment/comment";
 import db from "../../../firebase";
+import Like from "../likes/like"
 
 const style = { display: "flex", justifyContent: "center" };
 
 const Content = forwardRef(
   
-  ({ userName, caption, ImageUrl, avatar, timestamp, comments, id }, ref) => {
+  ({ userName, caption, ImageUrl, avatar, timestamp, comments, id, likess }, ref) => {
     const [saved, setSaved] = useState("true");
     const [commentNumbe, setCommentNumber]= useState()
 
@@ -53,8 +54,7 @@ const Content = forwardRef(
               <Row gutter={{ xs: 8, sm: 16, md: 24, lg: 32 }}>
                 <Col className="gutter-row" span={6}>
                   <div style={style}>
-                    <HeartOutlined />
-                    Like
+                    <Like/>
                   </div>
                 </Col>
                 <Col className="gutter-row" span={6}>

@@ -18,13 +18,10 @@ export default function Contentt() {
   useEffect(() => {
     // this is where the code runs
     db.collection("posts").onSnapshot((snapshot) => {
-      setPosts(snapshot.docs.map((doc) => ({ id: doc.id, post: doc.data() })));
+      setPosts(snapshot.docs.map((doc) =>  ({ id: doc.id, post: doc.data() })));
       
     });
   }, []);
-
-
-
 
   return (
     <div>
