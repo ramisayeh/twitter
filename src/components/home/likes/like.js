@@ -1,28 +1,26 @@
 import React, { createElement, useState } from 'react';
 import { Comment, Tooltip, Avatar } from 'antd';
-import moment from 'moment';
 import { DislikeOutlined, LikeOutlined, DislikeFilled, LikeFilled } from '@ant-design/icons';
 import db from "../../../firebase";
 
-const likes = ({id, likes}) => {
-  const [like, setLike] = useState(0);
+const Likes = ({id}) => {
+  const [likes, setLikes] = useState(0);
   const [action, setAction] = useState(null);
 
   const like = () => {
-    setLike(likes);
-    setAction('liked');
-
     db.collection("posts")
-      .doc(id)
-      .update({
-        likes: likes,
-      })
-      .then(function () {
-        console.log("Document successfully written!");
-      })
-      .catch(function (error) {
-        console.error("Error writing document: ", error);
-      });
+    .doc(id)
+    .update({
+      likes: likes,
+    })
+    .then(function () {
+      console.log("Document successfully written!");
+    })
+    .catch(function (error) {
+      console.error("Error writing document: ", error);
+    });
+
+    setLikes(likes+1);
   };
 
 
@@ -43,4 +41,4 @@ const likes = ({id, likes}) => {
     />
   );
 };
-export default Like;
+export default Likes;
