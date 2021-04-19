@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { Link } from "react-router-dom";
 import firebase from "firebase";
-import  { Redirect } from 'react-router-dom' 
+import  { Router } from 'react-router-dom' 
 
 class Login extends Component {
   constructor() {
@@ -30,7 +30,7 @@ class Login extends Component {
         alert("Successfully logged in");
         localStorage.setItem("username", userData.email);
         localStorage.setItem("password", userData.password);
-        return <Redirect to='/home'/>
+        window.location.href = "/home";
       })
       .catch((error) => {
         alert(error.message);

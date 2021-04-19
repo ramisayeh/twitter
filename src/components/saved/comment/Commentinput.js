@@ -7,7 +7,6 @@ function CommentInput({ comments, id, user }) {
   const [commentMap, setcommentMap] = useState(comments ? comments : []);
 
   const addComment = () => {
-    
 console.log('id',id)
     commentMap.push({
       comment: comment,

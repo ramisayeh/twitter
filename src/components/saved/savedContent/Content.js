@@ -4,7 +4,7 @@ import { Divider } from "antd";
 import { HeartOutlined, CommentOutlined, SaveTwoTone } from "@ant-design/icons";
 import { Row, Col } from "antd";
 import CommentInput from "../comment/Commentinput";
-import Comment from "../../../comment/comment";
+import Comment from "../comment/comment";
 import db from "../../../firebase";
 import {  Tooltip} from 'antd';
 import { DislikeOutlined, LikeOutlined, DislikeFilled, LikeFilled } from '@ant-design/icons';

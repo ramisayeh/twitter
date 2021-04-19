@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { Link } from "react-router-dom";
 import firebase from "firebase";
 import  { Redirect } from 'react-router-dom' 
-
+import db from "../../firebase";
 class Register extends Component {
   constructor() {
     super();
@@ -10,8 +10,10 @@ class Register extends Component {
       name: "",
       email: "",
       password: "",
-      password2: "",
       errors: {},
+      followers: [],
+      currentUser: null,
+      avatar: ""
     };
   }
 
@@ -20,12 +22,14 @@ class Register extends Component {
   };
 
   onSubmit = (e) => {
+    this.setState();
     e.preventDefault();
     const newUser = {
       name: this.state.name,
       email: this.state.email,
       password: this.state.password,
-      password2: this.state.password2,
+      followers: this.state.followers,
+      avatar: this.state.avatar
     };
     firebase
       .auth()
@@ -33,15 +37,17 @@ class Register extends Component {
       .then(() => {
         alert("Successfully registered! Please login.");
         localStorage.setItem("username", newUser.email);
-        localStorage.setItem("password", newUser.password);
-        localStorage.setItem("username", newUser.name);
+        db.collection("users").add({
+          timestamp: firebase.firestore.FieldValue.serverTimestamp(),
+          newUser
+  });
+        console.log('newnew',newUser)
         if (localStorage.getItem('username'))
-    return <Redirect to='/login'  />
+    return <Redirect to='/home'  />
       })
       .catch((error) => {
         alert(error.message);
       });
-    console.log(newUser);
   };
 
   render() {

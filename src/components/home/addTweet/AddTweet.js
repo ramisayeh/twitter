@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "antd/dist/antd.css";
 import { Skeleton, Switch, Card, Avatar, Input } from "antd";
 import {
@@ -23,29 +23,40 @@ export default function AddTweet() {
   const [caption, setCaption] = useState("");
   const [image, setImage] = useState(null);
   const [progress, setProgress] = useState(0);
+  const [users, setUsers] = useState([]);
+  const email = localStorage.getItem('username')
 
-  
+  useEffect(() => {
+    db.collection("users").where('email', '==', localStorage.getItem('username')).onSnapshot((snapshot) => {
+    setUsers(snapshot.docs.map((doc) => ({ id: doc.id, post: doc.data() })));
+    console.log('users', users)
+   const name = localStorage.setItem("name", users.name);
+    });
+  }, [])
+
+
   const sendTweet = (e) => {
     e.preventDefault();
+
+    let name = localStorage.getItem('name')
               if (image) {
                 const uploadTask = storage.ref(`images/${image.name}`).put(image);
           
                 uploadTask.on(
                   "state_changed",
                   (snapshot) => {
-                    // progress function .....
+                  
                     const progress = Math.round(
                       (snapshot.bytesTransferred / snapshot.totalBytes) * 100
                     );
                     setProgress(progress);
                   },
                   (error) => {
-                    // Error function...
+                   
                     console.log(error);
                     alert(error.message);
                   },
                   () => {
-                    // upload complete function
                     storage
                       .ref("images")
                       .child(image.name)
@@ -56,7 +67,7 @@ export default function AddTweet() {
                     caption: tweetMessage,
                     Likes: 0,
                     ImageUrl: url,
-                    userName: "ramisayeh",
+                    userName: name,
                     avatar:
                       "https://images.pexels.com/photos/7099638/pexels-photo-7099638.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940",
                   });
@@ -69,16 +80,6 @@ export default function AddTweet() {
                     }
           );
         }
-          db.collection("posts").add({
-            timestamp: firebase.firestore.FieldValue.serverTimestamp(),
-      caption: tweetMessage,
-      Likes: 0,
-      userName: "ramisayeh",
-      avatar:
-        "https://images.pexels.com/photos/7099638/pexels-photo-7099638.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940",
-    });
-    
-
     setTweetMessage("");
     setTweetImage("");
   };

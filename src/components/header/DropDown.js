@@ -1,16 +1,31 @@
 import React from 'react'
 import { Menu } from 'antd';
 import './DropDown.css'
+import { BrowserRouter as Router, Route, Switch, Redirect } from "react-router-dom";
 import { CaretDownOutlined, LogoutOutlined } from '@ant-design/icons';
-
+import firebase from 'firebase';
 const { SubMenu } = Menu;
 
-class DropDown extends React.Component {
+const DropDown =()=> {
+
+ const handleLogout =()=>{
+      firebase
+        .auth()
+        .signOut()
+        .then(() => {
+          alert('Successfully logged out');
+          window.location.href = "/";
+        })
+        .catch(error => {
+          alert(error.message);
+          window.location.href = "/";
+        });
+    
+}
  
-  render() {
     
     return (
-      <Menu id='menu' onClick={this.handleClick} mode="horizontal">
+      <Menu id='menu' mode="horizontal">
        
         <SubMenu key="SubMenu" icon={<CaretDownOutlined />} title="Profile">
         
@@ -20,12 +35,12 @@ class DropDown extends React.Component {
           </Menu.ItemGroup>
           <Menu.ItemGroup title="Item 2">
             <Menu.Item key="setting:3">Setting</Menu.Item>
-            <Menu.Item key="setting:4"> <LogoutOutlined />Logout</Menu.Item>
+            <Menu.Item key="setting:4" onClick={handleLogout}  > <LogoutOutlined />Logout</Menu.Item>
           </Menu.ItemGroup>
         </SubMenu>
       </Menu>
     );
-  }
+  
 }
 
 export default DropDown ;
