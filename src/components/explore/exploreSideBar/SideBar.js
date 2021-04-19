@@ -7,13 +7,16 @@ export default class SideBar extends Component {
 
     state = {
         collapsed: false,
+        navbar: 'top'
       };
-    
-      toggleCollapsed = () => {
-        this.setState({
-          collapsed: !this.state.collapsed,
-        });
-      };
+    handleTodle =()=>{
+      if(this.navbar === 'top'){
+        this.setState({ navbar: 'latest' })
+      }
+        this.setState({ navbar: 'top' })
+      localStorage.setItem("navbar", this.state.navbar);
+    }
+     
     render() {
         return (
 <div style={{ display:'flex', justifyContent:'flex-end', zIndex: 1, margin: '95px 0px 0px' }}>
@@ -26,10 +29,10 @@ export default class SideBar extends Component {
           inlineCollapsed={this.state.collapsed}
           Style={{display:'flex', justifyContent:'flex-end'}}
         >
-          <Menu.Item key="1" >
+          <Menu.Item key="1"  onClick={this.handleTodle}>
             Top
           </Menu.Item>
-          <Menu.Item key="2" >
+          <Menu.Item key="2" onClick={this.handleTodle}>
             Latest
           </Menu.Item>
           <Menu.Item key="3" >

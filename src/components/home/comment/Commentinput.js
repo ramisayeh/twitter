@@ -8,7 +8,7 @@ function CommentInput({ comments, id, user }) {
 
   const addComment = () => {
     // Add a new document in collection "cities"
-
+console.log('id',id)
     commentMap.push({
       comment: comment,
     });

@@ -54,6 +54,7 @@ export default function AddTweet() {
                         db.collection("posts").add({
                           timestamp: firebase.firestore.FieldValue.serverTimestamp(),
                     caption: tweetMessage,
+                    Likes: 0,
                     ImageUrl: url,
                     userName: "ramisayeh",
                     avatar:
@@ -68,7 +69,14 @@ export default function AddTweet() {
                     }
           );
         }
-      
+          db.collection("posts").add({
+            timestamp: firebase.firestore.FieldValue.serverTimestamp(),
+      caption: tweetMessage,
+      Likes: 0,
+      userName: "ramisayeh",
+      avatar:
+        "https://images.pexels.com/photos/7099638/pexels-photo-7099638.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940",
+    });
     
 
     setTweetMessage("");

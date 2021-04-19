@@ -32,6 +32,8 @@ export default function Home({ user }) {
           ImageUrl={post.ImageUrl}
           caption={post.caption}
           comments={post.comments}
+          likes={post.Likes}
+          Number={post.Number}
           />
         ))}</Col>
     </Row>

@@ -37,6 +37,7 @@ userName={post.userName}
 ImageUrl={post.ImageUrl}
 caption={post.caption}
 comments={post.comments}
+likes={post.Likes}
 />
 ))}</Col>
 </Row>
