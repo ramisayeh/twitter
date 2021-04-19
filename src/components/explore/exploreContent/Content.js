@@ -14,10 +14,15 @@ const onSearch = (value) => console.log(value);
 
 export default function Contentt() {
   const [posts, setPosts] = useState([]);
-
+const nav = localStorage.getItem('navbar')
   useEffect(() => {
     // this is where the code runs
-    db.collection("posts").onSnapshot((snapshot) => {
+    if(nav === "top"){
+    db.collection("posts").orderBy('Likes', "desc").onSnapshot((snapshot) => {
+      setPosts(snapshot.docs.map((doc) =>  ({ id: doc.id, post: doc.data() })));
+      
+    });
+    } else db.collection("posts").orderBy('Likes').onSnapshot((snapshot) => {
       setPosts(snapshot.docs.map((doc) =>  ({ id: doc.id, post: doc.data() })));
       
     });

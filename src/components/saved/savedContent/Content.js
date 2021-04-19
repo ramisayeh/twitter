@@ -1,67 +1,114 @@
-import React from "react";
+import React, { forwardRef, useState, useEffect, createElement } from "react";
 import "./Content.css";
 import { Divider } from "antd";
-import { HeartOutlined, CommentOutlined,  } from "@ant-design/icons";
+import { HeartOutlined, CommentOutlined, SaveTwoTone } from "@ant-design/icons";
 import { Row, Col } from "antd";
-import {  Space } from 'antd';
-import { AudioOutlined } from '@ant-design/icons';
+import CommentInput from "../comment/Commentinput";
+import Comment from "../../../comment/comment";
+import db from "../../../firebase";
+import {  Tooltip} from 'antd';
+import { DislikeOutlined, LikeOutlined, DislikeFilled, LikeFilled } from '@ant-design/icons';
+const style = { display: "flex", justifyContent: "center" };
 
+const Content = forwardRef(
+  
+  ({ userName, caption, ImageUrl, avatar, timestamp, comments, id, likes, Number }, ref) => {
+    const [saved, setSaved] = useState("true");
+    const [commentNumbe, setCommentNumber]= useState()
+    const [Likes, setLikes] = useState(likes);
+    const [Deslike, setDeslike] = useState(likes);
+    const [number, setNumber] = useState(Number);
+    const [action, setAction] = useState(null);
+  
+    const handleLike=()=>{
+      setLikes(Likes+1);
+    
+    
+        console.log(Number, 'number')
+    db.collection("posts")
+    .doc(id)
+    .update({
+      Likes: Likes,
+    })
+    .then(function () {
+      console.log("id",id)
+      console.log("Document like successfully written!", Likes);
+    })
+    .catch(function (error) {
+      console.error("Error writing document: ", error);
+    });
 
-const style = { padding: "8px 0", display: "flex", justifyContent: "center" };
+    }
+  
+    const handleSave=()=>{
+     
+      db.collection("posts")
+        .doc(id)
+        .update({
+          saves: saved,
+        })
+        .then(function () {
+          console.log("Document successfully written!");
+        })
+        .catch(function (error) {
+          console.error("Error writing document: ", error);
+        });
+  
+        setSaved("true");
+    }
 
-
-export default function Content() {
-  return (
-    <div className='contentContainer'>
-       <Space direction="vertical">
-    <div className="tweetEntry-tweetHolder">
-      {/* Entry with Media turned on. */}
-      <div className="tweetEntry">
-        <div className="tweetEntry-content">
-          <a className="tweetEntry-account-group" href="[accountURL]">
-            <img
-              className="tweetEntry-avatar"
-              src="http://placekitten.com/200/200"
-            />
-            <strong className="tweetEntry-fullname">[fullname]</strong>
-            <span className="tweetEntry-username">
-              @<b>[username]</b>
-            </span>
-            <span className="tweetEntry-timestamp">- [timestamp]</span>
-          </a>
-          <div className="tweetEntry-text-container">
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed quam
-            ipsum, finibus ac est sed, vestibulum condimentum neque. Sed eget
-            iaculis.
+    return (
+      <div className="contentContainer" ref={ref}>
+        <div className="tweetEntry-tweetHolder">
+          <div className="tweetEntry">
+            <div className="tweetEntry-content">
+              <a className="tweetEntry-account-group" href="[accountURL]">
+                <img className="tweetEntry-avatar" alt=""src={avatar} />
+                <strong className="tweetEntry-fullname">{userName}</strong>
+                <strong className="tweetEntry-fullname">{timestamp}</strong>
+              </a>
+              <div className="tweetEntry-text-container">{caption}</div>
+            </div>
+            <div className="optionalMedia">
+              <img className="optionalMedia-img" src={ImageUrl} alt="" />
+            </div>
+            <Divider />
+            <div>
+              <Row gutter={{ xs: 8, sm: 16, md: 24, lg: 32 }}>
+                <Col className="gutter-row" span={6}>
+                  <div style={style}>
+                  <Tooltip key="comment-basic-like" title="Like">
+      <span onClick={handleLike}>
+        {createElement(action === 'liked' ? LikeFilled : LikeOutlined)}
+        <span className="comment-action">{likes}</span>
+      </span>
+    </Tooltip>
+                  </div>
+                </Col>
+                <Col className="gutter-row" span={6}>
+                </Col>
+                <Col className="gutter-row" span={6}>
+                  <div style={style}>
+                    <button onClick={handleSave} style={{backgroundColor: 'white', }}>
+                    <SaveTwoTone />
+                    </button>
+                  </div>
+                </Col>
+              </Row>
+            </div>
           </div>
         </div>
-        <div className="optionalMedia">
-          <img
-            className="optionalMedia-img"
-            src="http://placekitten.com/500/400"
-          />
-        </div>
-        <Divider />
-        <div>
-          <Row gutter={{ xs: 8, sm: 16, md: 24, lg: 32 }}>
-            <Col className="gutter-row" span={6}>
-              <div style={style}>
-                <HeartOutlined />Like
-              </div>
-            </Col>
-            <Col className="gutter-row" span={6}>
-              <div style={style}><CommentOutlined />Comment</div>
-            </Col>
-            <Col className="gutter-row" span={6}>
-              <div style={style}>col-6</div>
-            </Col>
-          </Row>
-        </div>
+        {comments ? (
+        comments.map((comment) => (
+          <Comment  comment={comment.comment} />
+        ))
+      ) : (
+        <></>
+      )}
+      <CommentInput comments={comments} id={id}  />
       </div>
-    </div>
-    </Space>
-    
-    </div>
-    
-  );
-}
+    );
+  }
+);
+
+export default Content;

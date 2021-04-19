@@ -7,22 +7,26 @@ export default class SideBar extends Component {
 
     state = {
         collapsed: false,
-        navbar: 'top'
+        navbar: 'latest',
+        defaultSelected: '2'
       };
     handleTodle =()=>{
-      if(this.navbar === 'top'){
-        this.setState({ navbar: 'latest' })
-      }
-        this.setState({ navbar: 'top' })
-      localStorage.setItem("navbar", this.state.navbar);
+
+        localStorage.setItem("navbar", 'top');  
+        window.location.reload(false);
     }
+    handleTodle1 =()=>{
+
+      localStorage.setItem("navbar", 'latest');  
+      window.location.reload(false);
+  }
      
     render() {
         return (
 <div style={{ display:'flex', justifyContent:'flex-end', zIndex: 1, margin: '95px 0px 0px' }}>
 <div style={{ width: 190, display:'flex', justifyContent:'flex-end' }}>
         <Menu
-          defaultSelectedKeys={['1']}
+          defaultSelectedKeys={this.defaultSelected}
           defaultOpenKeys={['sub1']}
           mode="inline"
           theme="light"
@@ -32,7 +36,7 @@ export default class SideBar extends Component {
           <Menu.Item key="1"  onClick={this.handleTodle}>
             Top
           </Menu.Item>
-          <Menu.Item key="2" onClick={this.handleTodle}>
+          <Menu.Item key="2"  onClick={this.handleTodle1}>
             Latest
           </Menu.Item>
           <Menu.Item key="3" >
